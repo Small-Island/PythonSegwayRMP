@@ -1,0 +1,17 @@
+.catkin_workspace
+build
+devel
+*out
+webrtc_log*
+main_segway_rmp
+test_segway_rmp
+file_segway_rmp
+file_not_segway_rmp
+file_count_segway_rmp
+tst
+without_SegwayRMPNode
+main
+main_ras
+/delay
+log
+c++/
