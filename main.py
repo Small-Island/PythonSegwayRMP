@@ -58,21 +58,23 @@ def computeChecksum(arg_packet):
 #     }
 # }
 
+def move(arg_linear_velocity, arg_angular_velocity):
+    packet = b'\xF0\x55\x00\x00\x00\x00'
+    linear_velocity = arg_linear_velocity # m/s
+    angular_velocity = arg_angular_velocity # deg/s
+    packet += b'\x04'           # id upper
+    packet += b'\x13'           # id lower
+    packet += b'\x00'           # CAN Bus Channel
+    packet += int(linear_velocity * MPS_TO_COUNTS).to_bytes(2, 'big', signed=True)
+    packet += int(angular_velocity * MPS_TO_COUNTS).to_bytes(2, 'big', signed=True)
+    packet += b'\x00\x00\x00\x00'
+    packet += computeChecksum(packet).to_bytes(1, 'big', signed=False)
+    print('len', len(packet),  BytesToStringIn0Xxx(packet))
+    return packet
+
+########## main ###############
+
 # ser = serial.Serial("/dev/ttyUSB0", 9600, timeout=1)
-
-packet = b'\xF0\x55\x00\x00\x00\x00'
-linear_velocity = 4 # m/s
-angular_velocity = 0 # deg/s
-packet += b'\x04'           # id upper
-packet += b'\x13'           # id lower
-packet += b'\x00'           # CAN Bus Channel
-packet += int(linear_velocity * MPS_TO_COUNTS).to_bytes(2, 'big', signed=True)
-packet += int(angular_velocity * MPS_TO_COUNTS).to_bytes(2, 'big', signed=True)
-packet += b'\x00\x00\x00\x00'
-packet += computeChecksum(packet).to_bytes(1, 'big', signed=False)
-print('len', len(packet),  BytesToStringIn0Xxx(packet))
-
-msg = IntListToBytes(packet)
-
-# ser.write(msg)
+move(1,2)
+# ser.write(move(1,1))
 # ser.close()
